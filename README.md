@@ -1,15 +1,21 @@
 # LogCollectionSystem
 一个高可用分布式日志手机系统的实现
 
-###需求分析：
+### 需求分析：
     使用分层日志收集架构设计一个高可用的分布式日志收集系统，将收集到的日志数据分别发送到kafka的ad_log主题和HDFS的ad_log目录，目录格式如：ad_log/20190509。然后使用java编写Kafka Consumer来消费Kafka的ad_log主题的数据。
-###实现思路：
+### 实现思路：
     1.创建一个日志收集agent，用于收集服务器本地日志文件中的数据，agent中定义容错处理器（failover sinkprocessor），一个agent对应多个collector，实现任何一个collector挂掉不也不影响系统的日志收集服务。
-agent:    taildir source —> channel —> failover sinkprocessor —> avro sink
+    
+taildir source —> channel —> failover sinkprocessor —> avro sink
+
 agent.sources = r1 
+
 agent.channels = c1
+
 agent.sinks = k1 k2
+
 agent.sources.r1.type = TAILDIR
+
 agent.sources.r1.positionFile = /bigdata/flume/taildir/position/taildir_position.json
 agent.sources.r1.filegroups = f1
 agent.sources.r1.filegroups.f1 = /bigdata/taildir_log/test1/test.log 
